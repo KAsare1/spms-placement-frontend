@@ -1,41 +1,112 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/University of Ghana logo.svg";
 import silhouette from "../assets/great-hall-artwork-BIacy5Lf.webp";
 import SubmitSuccessModal from "../modals/submitSuccess"; // Import the modal
+import axios from "axios";
+
+interface Program {
+  id: number;
+  program_type: string;
+  major: string;
+  second_major?: string;
+  minor?: string;
+  program: string;
+}
 
 function Choices() {
-  const [openModal, setOpenModal] = useState(false); // State to handle modal visibility
-  const [selectedCourses, setSelectedCourses] = useState({
-    firstChoice: "",
-    secondChoice: "",
-    thirdChoice: "",
+  const [openModal, setOpenModal] = useState(false);
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [studentId, setStudentId] = useState<number | null>(null);
+  const [studentEmail, setStudentEmail] = useState<string>('');
+  const [firstChoice, setFirstChoice] = useState<number | null>(null);
+  const [secondChoice, setSecondChoice] = useState<number | null>(null);
+  const [thirdChoice, setThirdChoice] = useState<number | null>(null);
+  const selectedCourses = useState({
+    firstChoice: firstChoice,
+    secondChoice: secondChoice,
+    thirdChoice: thirdChoice,
   });
+  const [loadingPrograms, setLoadingPrograms] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Sample course options (these can be extended as needed)
-  const courses = [
-    "Computer Science with Biological Science Programme",
-    "Bachelor of Science in Mathematics and Statistics",
-    "Electrical Engineering and Renewable Energy Systems",
-    "Mechanical Engineering with Robotics",
-    "Environmental Science with Climate Change Studies",
-    "Artificial Intelligence and Data Science Programme",
-    "Physics with Space Science and Technology",
-    "Biomedical Engineering with Molecular Biology",
-    "Chemistry with Pharmaceutical Studies",
-    "Information Technology with Cybersecurity",
-  ];
+  const storedStudentId = localStorage.getItem('student_id');
 
-  const handleConfirmChoices = (e: React.FormEvent) => {
-    e.preventDefault();
-    setOpenModal(true); // Open the modal when choices are confirmed
+  useEffect(() => {
+    if (storedStudentId) {
+      axios
+        .get(`https://placement-server.onrender.com/auth/student/${storedStudentId}/`)
+        .then((response) => {
+          setStudentId(response.data.id);
+          setStudentEmail(response.data.email)
+        })
+        .catch(() => {
+          setErrorMessage('Failed to fetch student details.');
+        });
+    }
+  }, [storedStudentId]);
+
+  useEffect(() => {
+    axios
+      .get('https://placement-server.onrender.com/placement/programs/')
+      .then((response) => {
+        setPrograms(response.data);
+        setLoadingPrograms(false);
+      })
+      .catch(() => {
+        setErrorMessage('Failed to fetch programs.');
+        setLoadingPrograms(false);
+      });
+  }, []);
+
+
+const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+
+  if (!firstChoice || !secondChoice || !thirdChoice || !studentId) {
+    setErrorMessage('Please select all choices and ensure student details are loaded.');
+    return;
+  }
+
+  if (firstChoice === secondChoice || firstChoice === thirdChoice || secondChoice === thirdChoice) {
+    setErrorMessage('Please select unique choices for all programs.');
+    return;
+  }
+
+  const confirmSubmission = window.confirm('Are you sure you want to submit your choices?');
+  if (!confirmSubmission) {
+    return;
+  }
+
+  setSubmitting(true);
+  const payload = {
+    student: studentId,
+    first_choice: firstChoice,
+    second_choice: secondChoice,
+    third_choice: thirdChoice,
+    email: studentEmail,
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCourses({
-      ...selectedCourses,
-      [e.target.name]: e.target.value,
-    });
-  };
+  try {
+    await axios.post('http://127.0.0.1:8000/placement/choices/submit/', payload);
+    setSuccessMessage('Choices submitted successfully!');
+    console.log('Submitting payload:', payload);
+    setErrorMessage(null);
+    setOpenModal(true);
+  } catch (error: any) {
+    const message = error.response?.data?.error;
+    console.log('Submitting payload:', payload);
+    console.log('Error response:', error.response);
+    setErrorMessage(message);
+    setSuccessMessage(null);
+  } finally {
+    console.log('Submitting payload:', payload);
+    setSubmitting(false);
+  }
+};
+
+
 
   return (
     <>
@@ -55,23 +126,22 @@ function Choices() {
               Kindly choose your first, second, and third course choices
             </span>
 
-            <form onSubmit={handleConfirmChoices} className="my-10 space-y-6">
+            <form onSubmit={handleSubmit} className="my-10 space-y-6">
               <div className="mt-2">
                 <select
                   id="firstChoice"
                   name="firstChoice"
+                  value={firstChoice || ''}
+                  disabled={loadingPrograms}
+                  onChange={(e) => setFirstChoice(Number(e.target.value))}
                   required
-                  onChange={handleInputChange}
                   className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
                 >
-                  <option value="" disabled selected>
-                    Choose your first choice
+                {programs.map((program) => (
+                  <option key={program.id} value={program.id}>
+                    {program.program}
                   </option>
-                  {courses.map((course, index) => (
-                    <option key={index} value={course}>
-                      {course}
-                    </option>
-                  ))}
+                ))}
                 </select>
               </div>
 
@@ -80,15 +150,19 @@ function Choices() {
                   id="secondChoice"
                   name="secondChoice"
                   required
-                  onChange={handleInputChange}
+                  value={secondChoice || ''}
+                  disabled={loadingPrograms}
+                  onChange={(e) => setSecondChoice(Number(e.target.value))}
                   className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
                 >
                   <option value="" disabled selected>
                     Choose your second choice
                   </option>
-                  {courses.map((course, index) => (
-                    <option key={index} value={course}>
-                      {course}
+                  {programs
+                  .filter((program) => program.id !== firstChoice) // Exclude first choice
+                  .map((program) => (
+                    <option key={program.id} value={program.id}>
+                      {program.program}
                     </option>
                   ))}
                 </select>
@@ -99,15 +173,19 @@ function Choices() {
                   id="thirdChoice"
                   name="thirdChoice"
                   required
-                  onChange={handleInputChange}
+                  value={thirdChoice || ''}
+                  disabled={loadingPrograms}
+                  onChange={(e) => setThirdChoice(Number(e.target.value))}
                   className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
                 >
                   <option value="" disabled selected>
                     Choose your third choice
                   </option>
-                  {courses.map((course, index) => (
-                    <option key={index} value={course}>
-                      {course}
+                  {programs
+                  .filter((program) => program.id !== firstChoice && program.id !== secondChoice) // Exclude first and second choices
+                  .map((program) => (
+                    <option key={program.id} value={program.id}>
+                      {program.program}
                     </option>
                   ))}
                 </select>
@@ -116,10 +194,13 @@ function Choices() {
               <div>
                 <button
                   type="submit"
+                  disabled={submitting || loadingPrograms}
                   className="flex w-full justify-center rounded-full bg-[#002D5D] px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Confirm Choices
+                  {submitting ? 'Submitting...' : 'Confirm Choices'}
                 </button>
+                {successMessage && <p className="text-green-500 mt-4 text-sm">{successMessage}</p>}
+                {errorMessage && <p className="text-red-500 mt-4 text-sm">{errorMessage}</p>}
               </div>
             </form>
           </div>

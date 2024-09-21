@@ -1,7 +1,47 @@
+import { useState } from "react";
 import logo from "../assets/University of Ghana logo.svg";
 import silhouette from "../assets/great-hall-artwork-BIacy5Lf.webp";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
+  const [studentId, setStudentId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const payload = {
+      student_id: studentId,
+      password: password,
+    };
+
+    try {
+      const response = await axios.post('https://placement-server.onrender.com/auth/login/', payload);
+
+      // Assuming the response contains a token after a successful login
+      const { access_token } = response.data.access;
+      const { refresh_token } = response.data.refresh;
+
+      // Store token in local storage (or session storage if desired)
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('refresh_token', refresh_token);
+      localStorage.setItem('student_id', studentId)
+
+      // Redirect to confirm code
+      navigate('/rules');
+
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(error.response?.data?.message || 'Login failed. Please try again.');
+      } else {
+        setErrorMessage('Login failed. Please try again.');
+      }
+    }
+  };
+
   return (
     <>
       <div className="flex h-screen">
@@ -17,12 +57,14 @@ function Login() {
               Welcome to the SPMS <br /> Placement System
             </span>
 
-            <form action="#" method="POST" className="space-y-6">
+            <form action="#" method="POST" className="space-y-6" onSubmit={handleSubmit}>
               <div className="mt-2">
                 <input
                   id="Student/Staff ID"
                   name="Student/Staff ID"
                   type="text"
+                  onChange={(e) => setStudentId(e.target.value)}
+                  value={studentId}
                   required
                   autoComplete="Student/Staff ID"
                   placeholder="Student/Staff ID"
@@ -36,6 +78,8 @@ function Login() {
                     id="password"
                     name="password"
                     type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="password"
                     placeholder="Password"
@@ -43,6 +87,12 @@ function Login() {
                   />
                 </div>
               </div>
+
+              {errorMessage && (
+                <div className="mb-4 text-red-500 text-center text-sm">
+                  {errorMessage}
+                </div>
+              )}
 
               <div>
                 <button

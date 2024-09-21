@@ -1,7 +1,56 @@
+import axios from "axios";
 import logo from "../assets/University of Ghana logo.svg";
 import silhouette from "../assets/great-hall-artwork-BIacy5Lf.webp";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Auth() {
+  const [code, setCode] = useState<string>('');
+  const [studentId, setStudentId] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const navigate = useNavigate(); // Use navigate to redirect to login
+
+  useEffect(() => {
+    // Retrieve student_id from localStorage
+    const storedStudentId = localStorage.getItem('student_id');
+    if (storedStudentId) {
+      setStudentId(storedStudentId);
+    } else {
+      setMessage('No student ID found. Please register first.');
+    }
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!studentId) {
+      setMessage('Student ID not found.');
+      return;
+    }
+
+    const payload = {
+      student_id: studentId,
+      code,
+    };
+
+    try {
+      await axios.post('https://placement-server.onrender.com/auth/confirm/', payload);
+      setMessage('Code confirmed! Redirecting to login...');
+      
+      // Redirect to login page after 2 seconds
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setMessage(error.response?.data?.message || 'Code confirmation failed');
+      } else {
+        setMessage('Code confirmation failed');
+      }
+    }
+  };
+
   return (
     <>
       <div className="flex h-screen">
@@ -21,17 +70,24 @@ function Auth() {
               complete this process.
             </span>
 
-            <form action="#" method="POST" className="space-y-6">
+            <form action="#" method="POST" className="space-y-6" onSubmit={handleSubmit}>
               <div className="mt-4">
                 <input
                   id="Confirmation Code"
                   name="Confirmation Code"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
                   type="text"
                   required
                   autoComplete="Confirmation Code"
                   className="block w-full rounded-xl border-0 py-3 px-5 text-[#0D0D0E] text-4xl font-bold shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 focus:ring-inset sm:text-sm sm:leading-6"
                 />
               </div>
+              {message && (
+                <div className={`mb-4 text-center text-sm ${message.includes('confirmed') ? 'text-green-500' : 'text-red-500'}`}>
+                  {message}
+                </div>
+              )}
             </form>
           </div>
         </div>
