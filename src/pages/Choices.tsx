@@ -21,11 +21,6 @@ function Choices() {
   const [firstChoice, setFirstChoice] = useState<number | null>(null);
   const [secondChoice, setSecondChoice] = useState<number | null>(null);
   const [thirdChoice, setThirdChoice] = useState<number | null>(null);
-  const selectedCourses = useState({
-    firstChoice: firstChoice,
-    secondChoice: secondChoice,
-    thirdChoice: thirdChoice,
-  });
   const [loadingPrograms, setLoadingPrograms] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -128,77 +123,80 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 
             <form onSubmit={handleSubmit} className="my-10 space-y-6">
               <div className="mt-2">
-                <select
-                  id="firstChoice"
-                  name="firstChoice"
-                  value={firstChoice || ''}
-                  disabled={loadingPrograms}
-                  onChange={(e) => setFirstChoice(Number(e.target.value))}
-                  required
-                  className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
-                >
-                {programs.map((program) => (
-                  <option key={program.id} value={program.id}>
-                    {program.program}
-                  </option>
-                ))}
-                </select>
+              <select
+                      id="firstChoice"
+                      name="firstChoice"
+                      value={firstChoice || ''}
+                      disabled={loadingPrograms}
+                      onChange={(e) => setFirstChoice(Number(e.target.value))}
+                      required
+                      className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
+                    >
+                      <option value="" disabled>
+                        Choose your first choice
+                      </option>
+                      {programs.map((program) => (
+                        <option key={program.id} value={program.id}>
+                          {program.program}
+                        </option>
+                      ))}
+                    </select>
               </div>
 
               <div>
-                <select
-                  id="secondChoice"
-                  name="secondChoice"
-                  required
-                  value={secondChoice || ''}
-                  disabled={loadingPrograms}
-                  onChange={(e) => setSecondChoice(Number(e.target.value))}
-                  className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
-                >
-                  <option value="" disabled selected>
-                    Choose your second choice
-                  </option>
-                  {programs
-                  .filter((program) => program.id !== firstChoice) // Exclude first choice
-                  .map((program) => (
-                    <option key={program.id} value={program.id}>
-                      {program.program}
-                    </option>
-                  ))}
-                </select>
+              <select
+  id="secondChoice"
+  name="secondChoice"
+  required
+  value={secondChoice || ''}
+  disabled={loadingPrograms}
+  onChange={(e) => setSecondChoice(Number(e.target.value))}
+  className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
+>
+  <option value="" disabled>
+    Choose your second choice
+  </option>
+  {programs
+    .filter((program) => program.id !== firstChoice) // Exclude first choice
+    .map((program) => (
+      <option key={program.id} value={program.id}>
+        {program.program}
+      </option>
+    ))}
+</select>
               </div>
 
               <div>
-                <select
-                  id="thirdChoice"
-                  name="thirdChoice"
-                  required
-                  value={thirdChoice || ''}
-                  disabled={loadingPrograms}
-                  onChange={(e) => setThirdChoice(Number(e.target.value))}
-                  className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
-                >
-                  <option value="" disabled selected>
-                    Choose your third choice
-                  </option>
-                  {programs
-                  .filter((program) => program.id !== firstChoice && program.id !== secondChoice) // Exclude first and second choices
-                  .map((program) => (
-                    <option key={program.id} value={program.id}>
-                      {program.program}
-                    </option>
-                  ))}
-                </select>
+              <select
+  id="thirdChoice"
+  name="thirdChoice"
+  required
+  value={thirdChoice || ''}
+  disabled={loadingPrograms}
+  onChange={(e) => setThirdChoice(Number(e.target.value))}
+  className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
+>
+  <option value="" disabled>
+    Choose your third choice
+  </option>
+  {programs
+    .filter((program) => program.id !== firstChoice && program.id !== secondChoice) // Exclude first and second choices
+    .map((program) => (
+      <option key={program.id} value={program.id}>
+        {program.program}
+      </option>
+    ))}
+</select>
               </div>
 
               <div>
-                <button
-                  type="submit"
-                  disabled={submitting || loadingPrograms}
-                  className="flex w-full justify-center rounded-full bg-[#002D5D] px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  {submitting ? 'Submitting...' : 'Confirm Choices'}
-                </button>
+              <button
+                    type="submit"
+                    disabled={submitting || loadingPrograms || !firstChoice || !secondChoice || !thirdChoice || !studentId}
+                    className="flex w-full justify-center rounded-full bg-[#002D5D] px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    {submitting ? 'Submitting...' : 'Confirm Choices'}
+                  </button>
                 {successMessage && <p className="text-green-500 mt-4 text-sm">{successMessage}</p>}
                 {errorMessage && <p className="text-red-500 mt-4 text-sm">{errorMessage}</p>}
               </div>
@@ -220,7 +218,7 @@ const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
           <SubmitSuccessModal
             isOpen={openModal}
             setIsOpen={setOpenModal}
-            courses={selectedCourses} // Passing selected courses to the modal
+            courses={{ firstChoice, secondChoice, thirdChoice }} // Passing choices directly
           />
         )}
       </div>

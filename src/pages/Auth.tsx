@@ -88,6 +88,12 @@ function Auth() {
                   {message}
                 </div>
               )}
+                      <button
+          type="submit"
+          className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600"
+        >
+          Confirm Code
+        </button>
             </form>
           </div>
         </div>

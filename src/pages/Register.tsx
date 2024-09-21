@@ -39,7 +39,7 @@ function Register() {
       localStorage.setItem('email', email)
 
       // Redirect to the code confirmation page
-      navigate('/confirm-code');
+      navigate('/auth');
       
     } catch (error) {
       if (axios.isAxiosError(error)) {
