@@ -17,7 +17,7 @@ function Choices() {
   const [openModal, setOpenModal] = useState(false);
   const [programs, setPrograms] = useState<Program[]>([]);
   const [studentId, setStudentId] = useState<number | null>(null);
-  const [studentEmail, setStudentEmail] = useState<string>('');
+  const [studentEmail, setStudentEmail] = useState<string>("");
   const [firstChoice, setFirstChoice] = useState<number | null>(null);
   const [secondChoice, setSecondChoice] = useState<number | null>(null);
   const [thirdChoice, setThirdChoice] = useState<number | null>(null);
@@ -26,31 +26,33 @@ function Choices() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const storedStudentId = localStorage.getItem('student_id');
+  const storedStudentId = localStorage.getItem("student_id");
 
   useEffect(() => {
     if (storedStudentId) {
       axios
-        .get(`https://placement-server.onrender.com/auth/student/${storedStudentId}/`)
+        .get(
+          `https://placement-server.onrender.com/auth/student/${storedStudentId}/`
+        )
         .then((response) => {
           setStudentId(response.data.id);
           setStudentEmail(response.data.email);
         })
         .catch(() => {
-          setErrorMessage('Failed to fetch student details.');
+          setErrorMessage("Failed to fetch student details.");
         });
     }
   }, [storedStudentId]);
 
   useEffect(() => {
     axios
-      .get('https://placement-server.onrender.com/placement/programs/')
+      .get("https://placement-server.onrender.com/placement/programs/")
       .then((response) => {
         setPrograms(response.data);
         setLoadingPrograms(false);
       })
       .catch(() => {
-        setErrorMessage('Failed to fetch programs.');
+        setErrorMessage("Failed to fetch programs.");
         setLoadingPrograms(false);
       });
   }, []);
@@ -59,16 +61,24 @@ function Choices() {
     event.preventDefault();
 
     if (!firstChoice || !secondChoice || !thirdChoice || !studentId) {
-      setErrorMessage('Please select all choices and ensure student details are loaded.');
+      setErrorMessage(
+        "Please select all choices and ensure student details are loaded."
+      );
       return;
     }
 
-    if (firstChoice === secondChoice || firstChoice === thirdChoice || secondChoice === thirdChoice) {
-      setErrorMessage('Please select unique choices for all programs.');
+    if (
+      firstChoice === secondChoice ||
+      firstChoice === thirdChoice ||
+      secondChoice === thirdChoice
+    ) {
+      setErrorMessage("Please select unique choices for all programs.");
       return;
     }
 
-    const confirmSubmission = window.confirm('Are you sure you want to submit your choices?');
+    const confirmSubmission = window.confirm(
+      "Are you sure you want to submit your choices?"
+    );
     if (!confirmSubmission) {
       return;
     }
@@ -83,12 +93,16 @@ function Choices() {
     };
 
     try {
-      await axios.post('https://placement-server.onrender.com/placement/choices/submit/', payload);
-      setSuccessMessage('Choices submitted successfully!');
+      await axios.post(
+        "https://placement-server.onrender.com/placement/choices/submit/",
+        payload
+      );
+      setSuccessMessage("Choices submitted successfully!");
       setErrorMessage(null);
       setOpenModal(true);
     } catch (error: any) {
-      const message = error.response?.data?.error || "You have filled this form already.";
+      const message =
+        error.response?.data?.error || "You have filled this form already.";
       setErrorMessage(message);
       setSuccessMessage(null);
     } finally {
@@ -96,12 +110,18 @@ function Choices() {
     }
   };
 
-  const isSubmitDisabled = submitting || loadingPrograms || !firstChoice || !secondChoice || !thirdChoice || !studentId;
+  const isSubmitDisabled =
+    submitting ||
+    loadingPrograms ||
+    !firstChoice ||
+    !secondChoice ||
+    !thirdChoice ||
+    !studentId;
 
   // Mapping course IDs to course names
   const getProgramName = (programId: number | null) => {
     const program = programs.find((p) => p.id === programId);
-    return program ? program.program : 'Unknown Program';
+    return program ? program.program : "Unknown Program";
   };
 
   const firstChoiceName = getProgramName(firstChoice);
@@ -129,7 +149,7 @@ function Choices() {
                 <select
                   id="firstChoice"
                   name="firstChoice"
-                  value={firstChoice || ''}
+                  value={firstChoice || ""}
                   disabled={loadingPrograms}
                   onChange={(e) => setFirstChoice(Number(e.target.value))}
                   required
@@ -151,7 +171,7 @@ function Choices() {
                   id="secondChoice"
                   name="secondChoice"
                   required
-                  value={secondChoice || ''}
+                  value={secondChoice || ""}
                   disabled={loadingPrograms}
                   onChange={(e) => setSecondChoice(Number(e.target.value))}
                   className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
@@ -174,7 +194,7 @@ function Choices() {
                   id="thirdChoice"
                   name="thirdChoice"
                   required
-                  value={thirdChoice || ''}
+                  value={thirdChoice || ""}
                   disabled={loadingPrograms}
                   onChange={(e) => setThirdChoice(Number(e.target.value))}
                   className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
@@ -183,7 +203,11 @@ function Choices() {
                     Choose your third choice
                   </option>
                   {programs
-                    .filter((program) => program.id !== firstChoice && program.id !== secondChoice)
+                    .filter(
+                      (program) =>
+                        program.id !== firstChoice &&
+                        program.id !== secondChoice
+                    )
                     .map((program) => (
                       <option key={program.id} value={program.id}>
                         {program.program}
@@ -206,7 +230,7 @@ function Choices() {
                   disabled={isSubmitDisabled}
                   className="flex w-full justify-center rounded-full bg-[#002D5D] px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  {submitting ? 'Submitting...' : 'Confirm Choices'}
+                  {submitting ? "Submitting..." : "Confirm Choices"}
                 </button>
               </div>
             </form>

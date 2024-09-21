@@ -5,20 +5,20 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const [studentId, setStudentId] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
+  const [studentId, setStudentId] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
   const [message, setMessage] = useState<string | null>(null);
 
-  const role = 'STUDENT'; // Hardcoded role
+  const role = "STUDENT"; // Hardcoded role
   const navigate = useNavigate(); // Use navigate for routing
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (password !== passwordConfirm) {
-      setMessage('Passwords do not match.');
+      setMessage("Passwords do not match.");
       return;
     }
 
@@ -31,21 +31,25 @@ function Register() {
     };
 
     try {
-      await axios.post('https://placement-server.onrender.com/auth/register/', payload);
-      setMessage('Registration successful! Please check your email for confirmation.');
-      
+      await axios.post(
+        "https://placement-server.onrender.com/auth/register/",
+        payload
+      );
+      setMessage(
+        "Registration successful! Please check your email for confirmation."
+      );
+
       // Store the student_id in localStorage
-      localStorage.setItem('student_id', studentId);
-      localStorage.setItem('email', email)
+      localStorage.setItem("student_id", studentId);
+      localStorage.setItem("email", email);
 
       // Redirect to the code confirmation page
-      navigate('/auth');
-      
+      navigate("/auth");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setMessage(error.response?.data?.message || 'Registration failed');
+        setMessage(error.response?.data?.message || "Registration failed");
       } else {
-        setMessage('Registration failed');
+        setMessage("Registration failed");
       }
     }
   };
@@ -60,7 +64,12 @@ function Register() {
             Register for the SPMS Placement System
           </span>
 
-          <form action="#" method="POST" className="space-y-6" onSubmit={handleSubmit}>
+          <form
+            action="#"
+            method="POST"
+            className="space-y-6"
+            onSubmit={handleSubmit}
+          >
             <div className="mt-2">
               <input
                 id="Student/Staff ID"
@@ -117,7 +126,13 @@ function Register() {
               />
             </div>
             {message && (
-              <div className={`mb-4 text-center text-sm ${message.includes('successful') ? 'text-green-500' : 'text-red-500'}`}>
+              <div
+                className={`mb-4 text-center text-sm ${
+                  message.includes("successful")
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
                 {message}
               </div>
             )}

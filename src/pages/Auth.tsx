@@ -5,18 +5,18 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Auth() {
-  const [code, setCode] = useState<string>('');
+  const [code, setCode] = useState<string>("");
   const [studentId, setStudentId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const navigate = useNavigate(); // Use navigate to redirect to login
 
   useEffect(() => {
     // Retrieve student_id from localStorage
-    const storedStudentId = localStorage.getItem('student_id');
+    const storedStudentId = localStorage.getItem("student_id");
     if (storedStudentId) {
       setStudentId(storedStudentId);
     } else {
-      setMessage('No student ID found. Please register first.');
+      setMessage("No student ID found. Please register first.");
     }
   }, []);
 
@@ -24,7 +24,7 @@ function Auth() {
     e.preventDefault();
 
     if (!studentId) {
-      setMessage('Student ID not found.');
+      setMessage("Student ID not found.");
       return;
     }
 
@@ -34,19 +34,21 @@ function Auth() {
     };
 
     try {
-      await axios.post('https://placement-server.onrender.com/auth/confirm/', payload);
-      setMessage('Code confirmed! Redirecting to login...');
-      
+      await axios.post(
+        "https://placement-server.onrender.com/auth/confirm/",
+        payload
+      );
+      setMessage("Code confirmed! Redirecting to login...");
+
       // Redirect to login page after 2 seconds
       setTimeout(() => {
-        navigate('/login');
+        navigate("/");
       }, 2000);
-
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setMessage(error.response?.data?.message || 'Code confirmation failed');
+        setMessage(error.response?.data?.message || "Code confirmation failed");
       } else {
-        setMessage('Code confirmation failed');
+        setMessage("Code confirmation failed");
       }
     }
   };
@@ -70,7 +72,12 @@ function Auth() {
               complete this process.
             </span>
 
-            <form action="#" method="POST" className="space-y-6" onSubmit={handleSubmit}>
+            <form
+              action="#"
+              method="POST"
+              className="space-y-6"
+              onSubmit={handleSubmit}
+            >
               <div className="mt-4">
                 <input
                   id="Confirmation Code"
@@ -84,16 +91,24 @@ function Auth() {
                 />
               </div>
               {message && (
-                <div className={`mb-4 text-center text-sm ${message.includes('confirmed') ? 'text-green-500' : 'text-red-500'}`}>
+                <div
+                  className={`mb-4 text-center text-sm ${
+                    message.includes("confirmed")
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
                   {message}
                 </div>
               )}
-                      <button
-          type="submit"
-          className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600"
-        >
-          Confirm Code
-        </button>
+              <div className="">
+                <button
+                  type="submit"
+                  className="flex w-full font-medium text-lg text-white justify-center rounded-full px-10 py-2 bg-[#002D5D] border-2 hover:bg-[#7F7F7F] hover:text-[#D0AA66]"
+                >
+                  Confirm Code
+                </button>
+              </div>
             </form>
           </div>
         </div>

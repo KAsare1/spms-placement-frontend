@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import submitSuccess from "../assets/submitSuccess.svg";
 
 export default function SubmitSuccessModal({
   isOpen,
@@ -44,17 +45,30 @@ export default function SubmitSuccessModal({
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="text-center sm:text-left">
+                      {/* Modal Illustration */}
+                      <div className="flex justify-center">
+                        <img
+                          src={submitSuccess}
+                          alt="submitSuccess illustration"
+                          className=""
+                        />
+                      </div>
+
                       <Dialog.Title
                         as="h3"
-                        className="text-lg leading-6 font-medium text-gray-900"
+                        className="text-lg font-bold text-center text-gray-900"
                       >
-                        Course Choices Confirmed
+                        Submission Successful!
                       </Dialog.Title>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
+                      <div className="">
+                        <span className="text-[14px] text-[#7F7F7F]">
+                          You will be notified by email with further information
+                          about your placement.
+                        </span>
+                        <p className=" text-sm text-gray-500">
                           You have selected the following courses:
                         </p>
-                        <ul className="mt-4 space-y-2">
+                        <ul className="text-lg font-medium mt-4 space-y-1">
                           <li>1st Choice: {courses.firstChoice}</li>
                           <li>2nd Choice: {courses.secondChoice}</li>
                           <li>3rd Choice: {courses.thirdChoice}</li>
@@ -63,14 +77,16 @@ export default function SubmitSuccessModal({
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none sm:ml-3 sm:w-auto"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Close
-                  </button>
+                {/* Close Button */}
+                <div className="flex justify-center mb-4">
+                  <a href="/">
+                    <button
+                      type="button"
+                      className="font-medium text-lg text-white rounded-full px-10 py-2 bg-[#002D5D] border-2 hover:bg-[#7F7F7F] hover:text-[#D0AA66]"
+                    >
+                      Close
+                    </button>
+                  </a>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

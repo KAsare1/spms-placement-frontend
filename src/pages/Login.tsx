@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
-  const [studentId, setStudentId] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [studentId, setStudentId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -19,25 +19,29 @@ function Login() {
     };
 
     try {
-      const response = await axios.post('https://placement-server.onrender.com/auth/login/', payload);
+      const response = await axios.post(
+        "https://placement-server.onrender.com/auth/login/",
+        payload
+      );
 
       // Assuming the response contains a token after a successful login
       const { access_token } = response.data.access;
       const { refresh_token } = response.data.refresh;
 
       // Store token in local storage (or session storage if desired)
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('refresh_token', refresh_token);
-      localStorage.setItem('student_id', studentId)
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+      localStorage.setItem("student_id", studentId);
 
       // Redirect to confirm code
-      navigate('/rules');
-
+      navigate("/rules");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setErrorMessage(error.response?.data?.message || 'Login failed. Please try again.');
+        setErrorMessage(
+          error.response?.data?.message || "Login failed. Please try again."
+        );
       } else {
-        setErrorMessage('Login failed. Please try again.');
+        setErrorMessage("Login failed. Please try again.");
       }
     }
   };
@@ -57,7 +61,12 @@ function Login() {
               Welcome to the SPMS <br /> Placement System
             </span>
 
-            <form action="#" method="POST" className="space-y-6" onSubmit={handleSubmit}>
+            <form
+              action="#"
+              method="POST"
+              className="space-y-6"
+              onSubmit={handleSubmit}
+            >
               <div className="mt-2">
                 <input
                   id="Student/Staff ID"
