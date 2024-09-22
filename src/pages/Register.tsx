@@ -10,6 +10,7 @@ function Register() {
   const [password, setPassword] = useState<string>("");
   const [passwordConfirm, setPasswordConfirm] = useState<string>("");
   const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // New loading state
 
   const role = "STUDENT"; // Hardcoded role
   const navigate = useNavigate(); // Use navigate for routing
@@ -31,29 +32,30 @@ function Register() {
     };
 
     try {
+      setLoading(true); // Start loading
       await axios.post(
         "https://placement-server.onrender.com/auth/register/",
         payload
       );
-      setMessage(
-        "Registration successful!"
-      );
+      setMessage("Registration successful!");
+      setLoading(false); // Stop loading
 
       // Store the student_id in localStorage
       localStorage.setItem("student_id", studentId);
       localStorage.setItem("email", email);
 
-      // Redirect to the code login page
+      // Redirect to the login page
       navigate("/login");
     } catch (error) {
+      setLoading(false); // Stop loading in case of an error
       if (axios.isAxiosError(error)) {
-        setMessage(error.response?.data?.message || "Registration failed");
+        setMessage(error.response?.data?.message || "This account already exists");
       } else {
-        console.log(payload)
         setMessage("Registration failed");
       }
     }
   };
+
   return (
     <div className="flex h-screen">
       <div className="flex absolute lg:mt-4 lg:ml-4">
@@ -141,9 +143,12 @@ function Register() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-full bg-[#002D5D] px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                disabled={loading} // Disable button when loading
+                className={`flex w-full justify-center rounded-full px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
+                  loading ? "bg-gray-500" : "bg-[#002D5D] hover:bg-indigo-500"
+                }`}
               >
-                Register
+                {loading ? "Registering..." : "Register"} {/* Show loading text */}
               </button>
             </div>
           </form>
