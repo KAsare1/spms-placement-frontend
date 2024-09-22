@@ -260,6 +260,26 @@ function Choices() {
           </div>
         </div>
 
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+      <div className="max-w-lg w-full bg-white shadow-lg rounded-lg p-8">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Course Combinations: "With" vs. "And"</h2>
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-blue-600">[Subject 1] with [Subject 2]</h3>
+          <p className="text-gray-700 mt-2">
+            This indicates a <span className="font-semibold">major-minor</span> structure. The first subject (Subject 1)
+            is the major focus, and the second subject (Subject 2) is the minor.
+          </p>
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-green-600">[Subject 1] and [Subject 2]</h3>
+          <p className="text-gray-700 mt-2">
+            This refers to a <span className="font-semibold">combined major</span>, where both subjects are studied more
+            equally, without a major-minor distinction.
+          </p>
+        </div>
+      </div>
+    </div>
+
         <div className="w-1/2 hidden lg:block">
           <img alt="silhouette" src={silhouette} className="h-full" />
         </div>
