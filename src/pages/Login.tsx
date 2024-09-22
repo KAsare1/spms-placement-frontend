@@ -8,44 +8,77 @@ function Login() {
   const [studentId, setStudentId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // New loading state
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); // New success message state
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setLoading(true); // Set loading to true when submission starts
+    setErrorMessage(null); // Clear previous error message
+    setSuccessMessage(null); // Clear previous success message
+  
     const payload = {
       student_id: studentId,
       password: password,
     };
-
+  
     try {
       const response = await axios.post(
         "https://placement-server.onrender.com/auth/login/",
         payload
       );
-
+  
       // Assuming the response contains a token after a successful login
       const access_token = response.data?.access;  // Adjust to your response
       const refresh_token = response.data?.refresh;
-
-      console.log(localStorage.getItem("access_token"));
-      console.log(localStorage.getItem("refresh_token"));
-
-      // Store token in local storage (or session storage if desired)
+  
+      // Store token in local storage
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("refresh_token", refresh_token);
       localStorage.setItem("student_id", studentId);
-
-      // Redirect to rules code
-      navigate("/rules");
+  
+      // Set success message
+      setSuccessMessage("Login successful! Redirecting...");
+  
+      // Redirect to the rules page after a short delay
+      setTimeout(() => {
+        navigate("/rules");
+      }, 2000); // Delay for 2 seconds to show the success message
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setErrorMessage(
-          error.response?.data?.message || "Login failed. Please try again."
-        );
+        // If the API returns an error response, check the status code
+        if (error.response) {
+          const status = error.response.status;
+          const errorData = error.response.data;
+  
+          // Handle specific status codes
+          if (status === 400) {
+            setErrorMessage("Invalid request. Please check your input.");
+          } else if (status === 401) {
+            setErrorMessage("Invalid credentials. Please check your student ID and password.");
+          } else if (status === 404) {
+            setErrorMessage("User not found. Please check your student ID.");
+          } else if (status === 500) {
+            setErrorMessage("Server error. Please try again later.");
+          } else {
+            // General fallback for other status codes
+            setErrorMessage(
+              errorData?.message || "Login failed. Please try again."
+            );
+          }
+        } else if (error.request) {
+          // Network error (request made but no response received)
+          setErrorMessage("Network error. Please check your connection.");
+        } else {
+          // Unknown error
+          setErrorMessage("An unknown error occurred. Please try again.");
+        }
       } else {
-        setErrorMessage("Login failed. Please try again.");
+        setErrorMessage("An error occurred. Please try again.");
       }
+    } finally {
+      setLoading(false); // Stop loading once the request completes
     }
   };
 
@@ -100,9 +133,21 @@ function Login() {
                 </div>
               </div>
 
+              {loading && (
+                <div className="text-blue-500 text-center text-sm">
+                  Processing...
+                </div>
+              )}
+
               {errorMessage && (
                 <div className="mb-4 text-red-500 text-center text-sm">
                   {errorMessage}
+                </div>
+              )}
+
+              {successMessage && (
+                <div className="mb-4 text-green-500 text-center text-sm">
+                  {successMessage}
                 </div>
               )}
 
@@ -110,8 +155,9 @@ function Login() {
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-full bg-[#002D5D] px-3 py-3 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  disabled={loading} // Disable button while loading
                 >
-                  Login
+                  {loading ? "Logging in..." : "Login"}
                 </button>
               </div>
             </form>
