@@ -61,7 +61,7 @@ function Login() {
           {/* Input fields for login */}
           <div className="w-full max-w-lg p-6">
             <span className="block text-center text-2xl font-bold mb-6">
-            Welcome to the <br /> SPMS Level 200 Programme Selection - 24/25 Academic Year
+              Welcome to the <br /> SPMS Level 200 Programme Selection - 24/25 Academic Year
             </span>
 
             <form
