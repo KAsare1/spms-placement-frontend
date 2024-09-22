@@ -3,6 +3,7 @@ import logo from "../assets/University of Ghana logo.svg";
 import silhouette from "../assets/great-hall-artwork-BIacy5Lf.webp";
 import SubmitSuccessModal from "../modals/submitSuccess";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface Program {
   id: number;
@@ -27,7 +28,9 @@ function Choices() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const storedStudentId = localStorage.getItem("student_id");
-
+  const accessToken = localStorage.getItem("access_token");
+  const navigate = useNavigate();
+  
   useEffect(() => {
     if (storedStudentId) {
       axios
@@ -43,6 +46,26 @@ function Choices() {
         });
     }
   }, [storedStudentId]);
+
+  useEffect(() => {
+    if (!accessToken) {
+      // Redirect to login if no access token is found
+      navigate("/"); // Ensure navigation without returning JSX
+    }
+  
+    // No return necessary here as we don't need a cleanup function
+  }, [accessToken, navigate]);
+
+
+  axios.interceptors.request.use(
+    (config) => {
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
 
   useEffect(() => {
     axios

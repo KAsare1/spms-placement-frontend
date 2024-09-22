@@ -25,8 +25,11 @@ function Login() {
       );
 
       // Assuming the response contains a token after a successful login
-      const { access_token } = response.data.access;
-      const { refresh_token } = response.data.refresh;
+      const access_token = response.data?.access;  // Adjust to your response
+      const refresh_token = response.data?.refresh;
+
+      console.log(localStorage.getItem("access_token"));
+      console.log(localStorage.getItem("refresh_token"));
 
       // Store token in local storage (or session storage if desired)
       localStorage.setItem("access_token", access_token);
