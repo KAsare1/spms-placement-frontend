@@ -181,7 +181,7 @@ function Choices() {
                   <option value="" disabled>
                     Choose your first choice
                   </option>
-                  {programs.map((program) => (
+                  {programs.sort((a, b) => a.program.localeCompare(b.program)).map((program) => (
                     <option key={program.id} value={program.id}>
                       {program.program}
                     </option>
