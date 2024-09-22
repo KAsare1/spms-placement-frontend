@@ -79,7 +79,7 @@ export default function SubmitSuccessModal({
                 </div>
                 {/* Close Button */}
                 <div className="flex justify-center mb-4">
-                  <a href="/">
+                  <a href="/login">
                     <button
                       type="button"
                       className="font-medium text-lg text-white rounded-full px-10 py-2 bg-[#002D5D] border-2 hover:bg-[#7F7F7F] hover:text-[#D0AA66]"
