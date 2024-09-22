@@ -25,8 +25,11 @@ function Login() {
       );
 
       // Assuming the response contains a token after a successful login
-      const { access_token } = response.data.access;
-      const { refresh_token } = response.data.refresh;
+      const access_token = response.data?.access;  // Adjust to your response
+      const refresh_token = response.data?.refresh;
+
+      console.log(localStorage.getItem("access_token"));
+      console.log(localStorage.getItem("refresh_token"));
 
       // Store token in local storage (or session storage if desired)
       localStorage.setItem("access_token", access_token);
@@ -58,7 +61,7 @@ function Login() {
           {/* Input fields for login */}
           <div className="w-full max-w-lg p-6">
             <span className="block text-center text-2xl font-bold mb-6">
-              Welcome to the SPMS <br /> Placement System
+            Welcome to the <br /> SPMS Level 200 Programme Selection - 24/25 Academic Year
             </span>
 
             <form

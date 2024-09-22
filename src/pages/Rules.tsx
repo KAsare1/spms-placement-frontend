@@ -1,9 +1,23 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/University of Ghana logo.svg";
 import back from "../assets/back-arrow.svg";
 import rules from "../assets/rules.svg";
 import regulations from "../assets/regulations.jpg";
 
 function Rules() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check for access token in localStorage
+    const accessToken = localStorage.getItem("access_token");
+
+    if (!accessToken) {
+      navigate("/");
+    }
+  }, [navigate]);
+
+
   return (
     <>
       <div className="flex h-screen">
@@ -11,11 +25,12 @@ function Rules() {
         <div className="flex absolute lg:mt-4 lg:ml-4">
           <img alt="University of Ghana Logo" src={logo} className="lg:h-40" />
         </div>
+
         {/* Left section: Logo and Rules svg */}
         <div className="w-1/2 flex flex-col justify-center items-center">
           <img src={rules} alt="Rules and Regulations illustration" />
           <span className="block text-center text-2xl font-bold">
-            Rules and Regulations{" "}
+            Rules and Regulations
           </span>
         </div>
 
@@ -46,7 +61,8 @@ function Rules() {
               </a>
             </div>
           </div>
-          {/* Rules and Regulations text*/}
+
+          {/* Rules and Regulations text */}
           <span className="text-3xl text-[#FF0000] text-center font-bold px-10 my-5">
             Please read the following Rules and Regulations carefully before
             proceeding.
