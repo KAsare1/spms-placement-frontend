@@ -264,7 +264,7 @@ function Choices() {
       <div className="max-w-lg w-full bg-white shadow-lg rounded-lg p-8">
         <h2 className="text-2xl font-bold mb-4 text-gray-800">Course Combinations: "With" vs. "And"</h2>
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-blue-600">Course with Course 2</h3>
+          <h3 className="text-lg font-semibold text-blue-600">Course 1 with Course 2</h3>
           <p className="text-gray-700 mt-2">
             This indicates a <span className="font-semibold">major-minor</span> structure. The first course (Course 1)
             is the major focus, and the second course (Course 2) is the minor.
