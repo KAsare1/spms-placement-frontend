@@ -36,7 +36,7 @@ function Register() {
         payload
       );
       setMessage(
-        "Registration successful! Please check your email for confirmation."
+        "Registration successful!"
       );
 
       // Store the student_id in localStorage
@@ -44,7 +44,7 @@ function Register() {
       localStorage.setItem("email", email);
 
       // Redirect to the code login page
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.message || "Registration failed");
@@ -150,7 +150,7 @@ function Register() {
           <p className="mt-6 text-center text-sm text-gray-500 flex justify-end">
             Already have an account?{" "}
             <a
-              href="/"
+              href="/login"
               className="pl-2 font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
               Login Here
