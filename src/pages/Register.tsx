@@ -43,8 +43,8 @@ function Register() {
       localStorage.setItem("student_id", studentId);
       localStorage.setItem("email", email);
 
-      // Redirect to the code confirmation page
-      navigate("/auth");
+      // Redirect to the code login page
+      navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.message || "Registration failed");
@@ -61,7 +61,7 @@ function Register() {
       <div className="w-1/2 flex flex-col justify-center items-center p-8">
         <div className="w-full max-w-lg p-6">
           <span className="block text-center text-2xl font-bold mb-6">
-            Register for the SPMS Placement System
+            Register for the SPMS Level 200 Programme Selection - 24/25 Academic Year
           </span>
 
           <form
