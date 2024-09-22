@@ -36,7 +36,7 @@ function Login() {
       localStorage.setItem("refresh_token", refresh_token);
       localStorage.setItem("student_id", studentId);
 
-      // Redirect to confirm code
+      // Redirect to rules code
       navigate("/rules");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -119,7 +119,7 @@ function Login() {
             <p className="mt-6 text-center text-sm text-gray-500 flex justify-end">
               You don’t have an account?{" "}
               <a
-                href="/register"
+                href="/"
                 className="pl-2 font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
               >
                 Register Here
