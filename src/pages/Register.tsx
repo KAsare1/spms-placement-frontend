@@ -51,7 +51,7 @@ function Register() {
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.message || "This account already exists");
       } else {
-        setMessage("Registration failed");
+        setMessage("Registration failed, try again later");
       }
     }
   };
