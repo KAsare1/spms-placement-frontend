@@ -49,6 +49,7 @@ function Register() {
       if (axios.isAxiosError(error)) {
         setMessage(error.response?.data?.message || "Registration failed");
       } else {
+        console.log(payload)
         setMessage("Registration failed");
       }
     }
