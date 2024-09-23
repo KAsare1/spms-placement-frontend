@@ -87,12 +87,12 @@ function Login() {
       <div className="flex flex-col lg:flex-row h-screen">
   {/* Logo */}
   <div className="flex absolute lg:mt-4 lg:ml-4">
-    <img alt="University of Ghana Logo" src={logo} className="h-16 lg:h-40" /> {/* Adjust logo size */}
+    <img alt="University of Ghana Logo" src={logo} className="h-16 lg:h-40" />
   </div>
 
-  {/* Left section: Logo and Login Form */}
+  
   <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-4 lg:p-8">
-    {/* Input fields for login */}
+    
     <div className="w-full max-w-lg p-6">
       <span className="block text-center text-xl lg:text-2xl font-bold mb-6">
         Welcome to the <br /> SPMS Level 200 Programme Selection - 24/25 Academic Year

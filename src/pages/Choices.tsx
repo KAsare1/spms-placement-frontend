@@ -154,12 +154,12 @@ function Choices() {
   return (
     <>
       <div className="flex flex-col lg:flex-row h-screen"> 
-        {/* Logo */}
+        
         <div className="flex justify-center mt-16 lg:mt-4 lg:ml-4"> 
           <img alt="University of Ghana Logo" src={logo} className="h-16 lg:h-40" /> 
         </div>
 
-        {/* Content Section: Centered text below logo on mobile */}
+        
         <div className="flex flex-col items-center justify-center w-full lg:w-1/2 p-4 lg:p-8 mt-6 lg:mt-0"> 
           <div className="w-full max-w-xl p-4 lg:p-6"> 
             <span className="block text-center text-lg lg:text-2xl font-bold"> 
@@ -250,7 +250,7 @@ function Choices() {
           </div>
         </div>
 
-        {/* Info Box - Displayed on all screens */}
+        
         <div className="flex flex-col items-center justify-center mx-5 p-6 w-full lg:w-1/2"> 
           <div className="max-w-lg w-full bg-white shadow-lg rounded-lg p-4 lg:p-8"> 
             <h2 className="text-xl lg:text-2xl font-bold mb-4 text-gray-800"> 
@@ -271,7 +271,7 @@ function Choices() {
           </div>
         </div>
 
-        {/* Silhouette Image */}
+        
         <div className="hidden lg:block w-1/2"> 
           <img alt="silhouette" src={silhouette} className="h-full object-cover" /> 
         </div>

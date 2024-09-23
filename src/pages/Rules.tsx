@@ -23,26 +23,26 @@ function Rules() {
       <div className="flex flex-col lg:flex-row h-screen">
   {/* Logo */}
   <div className="flex absolute lg:mt-4 lg:ml-4 mt-8 ml-4">
-    <img alt="University of Ghana Logo" src={logo} className="h-16 lg:h-40" /> {/* Adjust logo size for mobile */}
+    <img alt="University of Ghana Logo" src={logo} className="h-16 lg:h-40" /> 
   </div>
 
   {/* Left section: Logo and Rules svg */}
   <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-4">
-    <img src={rules} alt="Rules and Regulations illustration" className="w-3/4 lg:w-full" /> {/* Responsive width for image */}
-    <span className="block text-center text-xl lg:text-2xl font-bold mt-4"> {/* Responsive text size and margin */}
+    <img src={rules} alt="Rules and Regulations illustration" className="w-3/4 lg:w-full" /> 
+    <span className="block text-center text-xl lg:text-2xl font-bold mt-4"> 
       Rules and Regulations
     </span>
   </div>
 
-  {/* Right section: Rules Section */}
+  
   <div className="w-full lg:w-1/2 flex flex-col bg-gray-50 px-4 lg:px-10 py-4 lg:py-0">
-    {/* Back arrow and Accept button div */}
+    
     <div className="flex justify-between items-center w-full lg:px-10 my-5">
-      {/* Back Arrow */}
+     
       <div className="flex items-center rounded-md border-2 px-2 bg-[#F7F8F8] hover:bg-slate-500 hover:text-[#D0AA66]">
         <a href="/" className="flex items-center">
-          <img src={back} alt="Back Arrow" className="w-8 lg:w-10 text-[#6B7280]" /> {/* Responsive arrow size */}
-          <span className="text-sm lg:text-lg font-bold pl-2">Back</span> {/* Responsive text size */}
+          <img src={back} alt="Back Arrow" className="w-8 lg:w-10 text-[#6B7280]" /> 
+          <span className="text-sm lg:text-lg font-bold pl-2">Back</span> 
         </a>
       </div>
       {/* Accept Button */}
@@ -58,8 +58,8 @@ function Rules() {
       </div>
     </div>
 
-    {/* Rules and Regulations text */}
-    <span className="text-lg lg:text-3xl text-[#FF0000] text-center font-bold px-4 lg:px-10 my-5"> {/* Responsive text and padding */}
+    
+    <span className="text-lg lg:text-3xl text-[#FF0000] text-center font-bold px-4 lg:px-10 my-5"> 
       Please read the following Rules and Regulations carefully before proceeding.
     </span>
     <span className="text-base lg:text-xl px-4 lg:px-10 my-5 lg:my-10">
@@ -74,7 +74,7 @@ function Rules() {
       <br />
       4. A candidate who does not qualify to progress to the next level on the basis of <strong>Section 9.26(a)(ii)</strong> and <strong>Section 9.26(a)(iii)</strong> shall be asked by the Registrar to withdraw from the University.
     </span>
-    <img alt="Regulations" src={regulations} className="w-full lg:mx-10 my-4 lg:my-0" /> {/* Responsive image */}
+    <img alt="Regulations" src={regulations} className="w-full lg:mx-10 my-4 lg:my-0" /> 
   </div>
 </div>
 
