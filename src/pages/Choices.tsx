@@ -153,21 +153,23 @@ function Choices() {
 
   return (
     <>
-      <div className="flex h-screen">
-        <div className="flex absolute lg:mt-4 lg:ml-4">
-          <img alt="University of Ghana Logo" src={logo} className="lg:h-40" />
+      <div className="flex flex-col lg:flex-row h-screen"> 
+        {/* Logo */}
+        <div className="flex justify-center mt-16 lg:mt-4 lg:ml-4"> 
+          <img alt="University of Ghana Logo" src={logo} className="h-16 lg:h-40" /> 
         </div>
 
-        <div className="w-1/2 flex flex-col justify-center items-center p-8">
-          <div className="w-full max-w-xl p-6">
-            <span className="block text-center text-2xl font-bold">
+        {/* Content Section: Centered text below logo on mobile */}
+        <div className="flex flex-col items-center justify-center w-full lg:w-1/2 p-4 lg:p-8 mt-6 lg:mt-0"> 
+          <div className="w-full max-w-xl p-4 lg:p-6"> 
+            <span className="block text-center text-lg lg:text-2xl font-bold"> 
               Hello Student,
             </span>
-            <span className="block text-center text-base pt-2">
+            <span className="block text-center text-sm lg:text-base pt-2"> 
               Kindly choose your first, second, and third course choices
             </span>
 
-            <form onSubmit={handleSubmit} className="my-10 space-y-6">
+            <form onSubmit={handleSubmit} className="my-6 lg:my-10 space-y-4 lg:space-y-6"> 
               <div className="mt-2">
                 <select
                   id="firstChoice"
@@ -176,7 +178,7 @@ function Choices() {
                   disabled={loadingPrograms}
                   onChange={(e) => setFirstChoice(Number(e.target.value))}
                   required
-                  className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
+                  className="block w-full rounded-xl border-0 py-2 px-4 lg:py-3 lg:px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
                 >
                   <option value="" disabled>
                     Choose your first choice
@@ -197,18 +199,16 @@ function Choices() {
                   value={secondChoice || ""}
                   disabled={loadingPrograms}
                   onChange={(e) => setSecondChoice(Number(e.target.value))}
-                  className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
+                  className="block w-full rounded-xl border-0 py-2 px-4 lg:py-3 lg:px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
                 >
                   <option value="" disabled>
                     Choose your second choice
                   </option>
-                  {programs
-                    .filter((program) => program.id !== firstChoice)
-                    .map((program) => (
-                      <option key={program.id} value={program.id}>
-                        {program.program}
-                      </option>
-                    ))}
+                  {programs.filter((program) => program.id !== firstChoice).map((program) => (
+                    <option key={program.id} value={program.id}>
+                      {program.program}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -220,32 +220,22 @@ function Choices() {
                   value={thirdChoice || ""}
                   disabled={loadingPrograms}
                   onChange={(e) => setThirdChoice(Number(e.target.value))}
-                  className="block w-full rounded-xl border-0 py-3 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
+                  className="block w-full rounded-xl border-0 py-2 px-4 lg:py-3 lg:px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-1 sm:text-sm"
                 >
                   <option value="" disabled>
                     Choose your third choice
                   </option>
-                  {programs
-                    .filter(
-                      (program) =>
-                        program.id !== firstChoice &&
-                        program.id !== secondChoice
-                    )
-                    .map((program) => (
-                      <option key={program.id} value={program.id}>
-                        {program.program}
-                      </option>
-                    ))}
+                  {programs.filter((program) => program.id !== firstChoice && program.id !== secondChoice).map((program) => (
+                    <option key={program.id} value={program.id}>
+                      {program.program}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              {errorMessage && (
-                <div className="text-red-500 text-sm">{errorMessage}</div>
-              )}
+              {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
 
-              {successMessage && (
-                <div className="text-green-500 text-sm">{successMessage}</div>
-              )}
+              {successMessage && <div className="text-green-500 text-sm">{successMessage}</div>}
 
               <div>
                 <button
@@ -260,30 +250,33 @@ function Choices() {
           </div>
         </div>
 
-            <div className="flex flex-col items-center justify-center min-h-screen mx-5 p-6">
-      <div className="max-w-lg w-full bg-white shadow-lg rounded-lg p-8">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Course Combinations: "With" vs. "And"</h2>
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-blue-600">Course 1 with Course 2</h3>
-          <p className="text-gray-700 mt-2">
-            This indicates a <span className="font-semibold">major-minor</span> structure. The first course (Course 1)
-            is the major focus, and the second course (Course 2) is the minor.
-          </p>
+        {/* Info Box - Displayed on all screens */}
+        <div className="flex flex-col items-center justify-center mx-5 p-6 w-full lg:w-1/2"> 
+          <div className="max-w-lg w-full bg-white shadow-lg rounded-lg p-4 lg:p-8"> 
+            <h2 className="text-xl lg:text-2xl font-bold mb-4 text-gray-800"> 
+              Course Combinations: "With" vs. "And"
+            </h2>
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-blue-600">Course 1 with Course 2</h3>
+              <p className="text-gray-700 mt-2">
+                This indicates a <span className="font-semibold">major-minor</span> structure. The first course (Course 1) is the major focus, and the second course (Course 2) is the minor.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-green-600">Course 1 and Course 2</h3>
+              <p className="text-gray-700 mt-2">
+                This refers to a <span className="font-semibold">combined major</span>, where both subjects are studied more equally, without a major-minor distinction.
+              </p>
+            </div>
+          </div>
         </div>
-        <div>
-          <h3 className="text-lg font-semibold text-green-600">Course 1 and Course 2</h3>
-          <p className="text-gray-700 mt-2">
-            This refers to a <span className="font-semibold">combined major</span>, where both subjects are studied more
-            equally, without a major-minor distinction.
-          </p>
-        </div>
-      </div>
-    </div>
 
-        <div className="w-1/2 hidden lg:block">
-          <img alt="silhouette" src={silhouette} className="h-full" />
+        {/* Silhouette Image */}
+        <div className="hidden lg:block w-1/2"> 
+          <img alt="silhouette" src={silhouette} className="h-full object-cover" /> 
         </div>
       </div>
+
 
       <SubmitSuccessModal
         isOpen={openModal}
@@ -292,7 +285,7 @@ function Choices() {
           firstChoice: firstChoiceName,
           secondChoice: secondChoiceName,
           thirdChoice: thirdChoiceName,
-        }} // Passing course names
+        }} 
       />
     </>
   );
